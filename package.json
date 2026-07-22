@@ -1,0 +1,7 @@
+{
+  "name": "no6-featurelist",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix MANABI-BA install && npm --prefix MANABI-BA run build && rm -rf dist && cp -r MANABI-BA/dist dist"
+  }
+}
