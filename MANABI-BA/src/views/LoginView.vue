@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
+import logoUrl from "../assets/manabi-ba-logo.png";
 
 const router = useRouter();
 
@@ -12,31 +13,7 @@ function signIn() {
 <template>
   <section class="login-view">
     <div class="login-logo">
-      <svg
-        class="logo-mark"
-        viewBox="0 0 560 200"
-        xmlns="http://www.w3.org/2000/svg"
-        role="img"
-        aria-label="manabi-ba"
-      >
-        <text
-          x="0"
-          y="150"
-          class="logo-text"
-        ><tspan fill="#9d9d9d">manabi</tspan><tspan fill="#1bb4c1">-</tspan><tspan fill="#f4c81e">ba</tspan></text>
-        <!-- ペン先アイコン -->
-        <g
-          transform="translate(468 8) rotate(28)"
-          fill="none"
-          stroke="#7f7f7f"
-          stroke-width="6"
-          stroke-linejoin="round"
-        >
-          <path d="M18 6 h30 v54 l-15 26 l-15 -26 z" fill="#ffffff" />
-          <line x1="33" y1="60" x2="33" y2="86" />
-          <circle cx="33" cy="30" r="7" fill="#7f7f7f" stroke="none" />
-        </g>
-      </svg>
+      <img class="logo-mark" :src="logoUrl" alt="manabi-ba" />
     </div>
 
     <div class="login-actions">
@@ -92,14 +69,7 @@ function signIn() {
   width: 68%;
   max-width: 280px;
   height: auto;
-}
-
-.logo-text {
-  font-family: "Nunito", "Baloo 2", "Hiragino Maru Gothic ProN",
-    "Segoe UI", system-ui, sans-serif;
-  font-size: 150px;
-  font-weight: 800;
-  letter-spacing: -2px;
+  display: block;
 }
 
 .login-actions {
