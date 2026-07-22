@@ -6,13 +6,13 @@ const router = useRouter();
 const chats = [
   {
     id: "xxx",
-    title: "xxx chat",
-    description: "進捗共有用のチャット",
+    title: "全体チャット",
+    description: "全体のチャット",
   },
   {
     id: "yyy",
-    title: "yyy chat",
-    description: "デザイン確認用のチャット",
+    title: "教員チャット",
+    description: "教員との個人チャット",
   },
   {
     id: "zzz",
