@@ -10,7 +10,7 @@ const props = defineProps({
 
 const chats = reactive({
   xxx: {
-    title: "xxx chat",
+    title: "全体チャット",
     messages: [
       {
         id: 1,
@@ -39,7 +39,7 @@ const chats = reactive({
     ],
   },
   yyy: {
-    title: "yyy chat",
+    title: "教員チャット",
     messages: [
       {
         id: 1,
