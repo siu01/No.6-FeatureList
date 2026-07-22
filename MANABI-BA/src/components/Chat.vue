@@ -8,6 +8,20 @@ const props = defineProps({
   },
 });
 
+const reactionOptions = [
+  { id: "like", symbol: "👍", label: "いいね" },
+  { id: "heart", symbol: "❤️", label: "ハート" },
+  { id: "check", symbol: "✅", label: "確認済み" },
+];
+
+function createReactions(counts = {}) {
+  return reactionOptions.map((reaction) => ({
+    ...reaction,
+    count: counts[reaction.id] ?? 0,
+    reacted: false,
+  }));
+}
+
 const chats = reactive({
   xxx: {
     title: "全体チャット",
@@ -19,6 +33,7 @@ const chats = reactive({
         text: "今日の進捗を共有します。",
         time: "10:00",
         isMine: false,
+        reactions: createReactions({ like: 2 }),
       },
       {
         id: 2,
@@ -27,6 +42,7 @@ const chats = reactive({
         text: "お願いします。",
         time: "10:02",
         isMine: true,
+        reactions: createReactions({ check: 1 }),
       },
       {
         id: 3,
@@ -35,6 +51,7 @@ const chats = reactive({
         text: "ログイン後の画面まで確認できています。",
         time: "10:05",
         isMine: false,
+        reactions: createReactions({ like: 1, check: 2 }),
       },
     ],
   },
@@ -48,6 +65,7 @@ const chats = reactive({
         text: "チャット画面のデザイン案を見ました。",
         time: "11:15",
         isMine: false,
+        reactions: createReactions({ heart: 1 }),
       },
       {
         id: 2,
@@ -56,6 +74,7 @@ const chats = reactive({
         text: "気になるところがあれば教えてください。",
         time: "11:18",
         isMine: true,
+        reactions: createReactions(),
       },
       {
         id: 3,
@@ -64,6 +83,7 @@ const chats = reactive({
         text: "一覧とフォームがまとまっていて見やすいです。",
         time: "11:21",
         isMine: false,
+        reactions: createReactions({ like: 2, heart: 1 }),
       },
     ],
   },
@@ -77,6 +97,7 @@ const chats = reactive({
         text: "デモの流れを確認したいです。",
         time: "13:30",
         isMine: false,
+        reactions: createReactions({ check: 1 }),
       },
       {
         id: 2,
@@ -85,6 +106,7 @@ const chats = reactive({
         text: "トップから各チャットに入る形にします。",
         time: "13:33",
         isMine: true,
+        reactions: createReactions({ like: 1 }),
       },
       {
         id: 3,
@@ -93,6 +115,7 @@ const chats = reactive({
         text: "それなら説明しやすそうです。",
         time: "13:36",
         isMine: false,
+        reactions: createReactions({ heart: 1, check: 1 }),
       },
     ],
   },
@@ -106,6 +129,17 @@ function formatTime(date) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(date);
+}
+
+function toggleReaction(chatMessage, reactionId) {
+  const reaction = chatMessage.reactions.find((item) => item.id === reactionId);
+
+  if (!reaction) {
+    return;
+  }
+
+  reaction.reacted = !reaction.reacted;
+  reaction.count += reaction.reacted ? 1 : -1;
 }
 
 function handleSubmit() {
@@ -126,6 +160,7 @@ function handleSubmit() {
     text: trimmedMessage,
     time: formatTime(new Date()),
     isMine: true,
+    reactions: createReactions(),
   });
 
   message.value = "";
@@ -154,6 +189,22 @@ function handleSubmit() {
             <time>{{ chatMessage.time }}</time>
           </div>
           <p>{{ chatMessage.text }}</p>
+
+          <div class="reaction-list" aria-label="リアクション">
+            <button
+              v-for="reaction in chatMessage.reactions"
+              :key="reaction.id"
+              class="reaction-button"
+              :class="{ 'is-reacted': reaction.reacted }"
+              type="button"
+              :aria-pressed="reaction.reacted"
+              :aria-label="`${reaction.label} ${reaction.count}件`"
+              @click="toggleReaction(chatMessage, reaction.id)"
+            >
+              <span aria-hidden="true">{{ reaction.symbol }}</span>
+              <span>{{ reaction.count }}</span>
+            </button>
+          </div>
         </div>
       </article>
     </div>
@@ -289,6 +340,39 @@ h1 {
 p {
   margin: 0;
   line-height: 1.6;
+}
+
+.reaction-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.reaction-button {
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 8px;
+  border: 1px solid #d0d5dd;
+  border-radius: 999px;
+  background: #fff;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.reaction-button:hover {
+  border-color: #42b883;
+  background: #f2fbf7;
+}
+
+.reaction-button.is-reacted {
+  border-color: #42b883;
+  background: #e7f7ef;
+  color: #256b4c;
 }
 
 time {
